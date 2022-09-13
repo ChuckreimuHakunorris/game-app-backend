@@ -25,21 +25,17 @@ app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: false }));
 
+// built-in middleware for json
 app.use(express.json());
 
+// serve static files
 app.use(express.static(path.join(__dirname, "/public")));
+app.use("/subdir", express.static(path.join(__dirname, "/public")));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "index.html"));
-});
-
-app.get("/new-page(.html)?", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "new-page.html"));
-});
-
-app.get("/old-page", (req, res) => {
-    res.redirect(301, "new-page");
-});
+// routes
+app.use("/", require("./routes/root"));
+app.use("/subdir", require("./routes/subdir"));
+app.use("/players", require("./routes/api/players"));
 
 app.all("*", (req, res) => {
     res.status(404);
