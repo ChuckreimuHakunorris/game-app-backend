@@ -1,0 +1,6 @@
+20220913	11:10:22	d2e6af71-2c12-4609-bef6-724b3faf9c7d	GET	undefined	/
+20220913	11:10:22	9998aff2-431a-40cb-9266-e96e7275d1e7	GET	undefined	/css/style.css
+20220913	11:12:48	261cf882-5693-4330-8108-2c4f4b047e5c	GET	undefined	/
+20220913	11:12:48	ea7340c4-a8ad-46b5-88b1-1c08468fe7d5	GET	undefined	/css/style.css
+20220913	11:14:30	94046991-487f-4396-88c4-b55cc9c443e0	OPTIONS	https://www.google.com	/
+20220913	11:14:30	55eca895-4278-4b31-bdfe-b2aeeee83711	GET	https://www.google.com	/
