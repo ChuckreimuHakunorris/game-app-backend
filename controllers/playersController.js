@@ -5,12 +5,6 @@ const getAllPlayers = (req, res) => {
     res.json(data.players);
 }
 
-const createNewPlayer = (req, res) => {
-    res.json({
-        "name": req.body.name
-    })
-}
-
 const updatePlayer = (req, res) => {
     res.json({
         "name": req.body.name
@@ -29,7 +23,6 @@ const getPlayer = (req, res) => {
 
 module.exports = {
     getAllPlayers,
-    createNewPlayer,
     updatePlayer,
     deletePlayer,
     getPlayer

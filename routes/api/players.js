@@ -4,7 +4,6 @@ const playersController = require("../../controllers/playersController");
 
 router.route("/")
     .get(playersController.getAllPlayers)
-    .post(playersController.createNewPlayer)
     .put(playersController.updatePlayer)
     .delete(playersController.deletePlayer);
 
