@@ -3,3 +3,4 @@ data/logs
 data/logs/**
 logs
 logs/**
+.env

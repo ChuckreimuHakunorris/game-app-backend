@@ -4,6 +4,11 @@ const playersDB = {
 }
 const bcrypt = require("bcrypt");
 
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const fsPromises = require("fs").promises;
+const path = require("path");
+
 const handleLogin = async (req, res) => {
     const { player, pwd } = req.body;
 
@@ -20,7 +25,31 @@ const handleLogin = async (req, res) => {
 
     if (match) {
         // create JWTs
-        res.json({ "success": `Player ${player} is logged in!` })
+        const accessToken = jwt.sign(
+            { "username": foundPlayer.username },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "30s" }
+        );
+
+        const refreshToken = jwt.sign(
+            { "username": foundPlayer.username },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        // Saving refresh token with current user
+        const otherPlayers = playersDB.players.filter(user => user.username !== foundPlayer.username);
+
+        const currentPlayer = { ...foundPlayer, refreshToken };
+
+        playersDB.setPlayers([...otherPlayers, currentPlayer]);
+
+        await fsPromises.writeFile(
+            path.join(__dirname, "..", "model", "players.json"),
+            JSON.stringify(playersDB.players)
+        );
+        res.cookie("jwt", refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000});
+        res.json({ accessToken });
     } else {
         res.sendStatus(401);
     }
