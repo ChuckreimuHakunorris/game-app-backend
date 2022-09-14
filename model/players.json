@@ -1,1 +1,29 @@
-[{"username":"Chuckreimu","password":"$2b$10$24a5oLIf7YJzyFshXBbtLO66LAxZxvCBEZyOpZOLlH1QDXHEWZf8K"},{"username":"ArcticFox","password":"$2b$10$CbP/3Ha4V73kNWvMO65La.bbAsvcF3gk9KXYrii6uuHBYd9.rtHZq"}]
+[
+    {
+        "username": "Chuckreimu",
+        "password": "$2b$10$L.6iDJ5UsoA3kj9Diu.Hs.8qu6wSatKbRzKCXXmKhx4maBkyfOv9S",
+        "created_on": "2022-09-14T08:34:18.475Z",
+        "games_played": 0,
+        "wins": 0,
+        "losses": 0,
+        "draws": 0
+    },
+    {
+        "username": "ArcticFox",
+        "password": "$2b$10$piZ6AxguySxT4z.HVrGiyeXHufbAtHo2vByUtyOYQ5qEcwsc2/v3W",
+        "created_on": "2022-09-14T08:36:30.425Z",
+        "games_played": 0,
+        "wins": 0,
+        "losses": 0,
+        "draws": 0
+    },
+    {
+        "username": "Dunebuggy",
+        "password": "$2b$10$icOTqqEmhvlQFmdcQGVW7.zt8HlnOyifbI4ZD.IueebOHyMlKiFme",
+        "created_on": "2022-09-14T08:37:26.223Z",
+        "games_played": 0,
+        "wins": 0,
+        "losses": 0,
+        "draws": 0
+    }
+]

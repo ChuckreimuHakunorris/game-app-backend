@@ -23,8 +23,19 @@ const handleNewPlayer = async (req, res) => {
     try {
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10);
+        
+        const date = new Date();
+        
         // Store the new player
-        const newPlayer = { "username": player, "password": hashedPwd };
+        const newPlayer = {
+             "username": player, 
+             "password": hashedPwd,
+             "created_on": date,
+             "games_played": 0,
+             "wins": 0,
+             "losses": 0,
+             "draws": 0
+            };
         playersDB.setPlayers([...playersDB.players, newPlayer]);
         await fsPromises.writeFile(
             path.join(__dirname, "..", "model", "players.json"),
