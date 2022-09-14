@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // routes
 app.use("/", require("./routes/root"));
+app.use("/register", require("./routes/register"));
 app.use("/players", require("./routes/api/players"));
 
 app.all("*", (req, res) => {
