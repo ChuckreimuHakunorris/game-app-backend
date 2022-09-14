@@ -30,6 +30,8 @@ app.use("/", require("./routes/root"));
 app.use("/register", require("./routes/register"));
 app.use("/auth", require("./routes/auth"));
 
+app.use("/refresh", require("./routes/refresh"));
+
 // protected routes
 app.use(verifyJWT);
 app.use("/players", require("./routes/api/players"));
