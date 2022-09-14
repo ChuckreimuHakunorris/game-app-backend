@@ -24,9 +24,15 @@ const handleLogin = async (req, res) => {
     const match = await bcrypt.compare(pwd, foundPlayer.password);
 
     if (match) {
+        const roles = Object.values(foundPlayer.roles);
         // create JWTs
         const accessToken = jwt.sign(
-            { "username": foundPlayer.username },
+            {
+                "UserInfo": {
+                    "username": foundPlayer.username,
+                    "roles": roles
+                }
+            },
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "15m" }
         );
@@ -48,7 +54,7 @@ const handleLogin = async (req, res) => {
             path.join(__dirname, "..", "model", "players.json"),
             JSON.stringify(playersDB.players)
         );
-        res.cookie("jwt", refreshToken, { httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000});
+        res.cookie("jwt", refreshToken, { httpOnly: true, sameSite: "None", /*secure: true, */maxAge: 24 * 60 * 60 * 1000 });
         res.json({ accessToken });
     } else {
         res.sendStatus(401);

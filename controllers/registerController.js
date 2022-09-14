@@ -28,7 +28,8 @@ const handleNewPlayer = async (req, res) => {
         
         // Store the new player
         const newPlayer = {
-             "username": player, 
+             "username": player,
+             "roles" : { "User": 1000 },
              "password": hashedPwd,
              "created_on": date,
              "games_played": 0,
