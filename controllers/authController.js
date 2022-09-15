@@ -1,12 +1,6 @@
-const playersDB = {
-    players: require("../model/players.json"),
-    setPlayers: function (data) { this.players = data }
-}
+const Player = require("../model/Player");
 const bcrypt = require("bcrypt");
-
 const jwt = require("jsonwebtoken");
-const fsPromises = require("fs").promises;
-const path = require("path");
 
 const handleLogin = async (req, res) => {
     const { player, pwd } = req.body;
@@ -15,7 +9,7 @@ const handleLogin = async (req, res) => {
         "message": "Username and password are required."
     });
 
-    const foundPlayer = playersDB.players.find(user => user.username === player);
+    const foundPlayer = await Player.findOne({ username: player }).exec();
 
     if (!foundPlayer) return res.sendStatus(401); // Unauthorized
 
@@ -43,16 +37,10 @@ const handleLogin = async (req, res) => {
         );
 
         // Saving refresh token with current user
-        const otherPlayers = playersDB.players.filter(user => user.username !== foundPlayer.username);
+        foundPlayer.refreshToken = refreshToken;
+        const result = await foundPlayer.save();
+        console.log(result);
 
-        const currentPlayer = { ...foundPlayer, refreshToken };
-
-        playersDB.setPlayers([...otherPlayers, currentPlayer]);
-
-        await fsPromises.writeFile(
-            path.join(__dirname, "..", "model", "players.json"),
-            JSON.stringify(playersDB.players)
-        );
         res.cookie("jwt", refreshToken, { httpOnly: true, sameSite: "None", /*secure: true, */maxAge: 24 * 60 * 60 * 1000 });
         res.json({ accessToken });
     } else {
