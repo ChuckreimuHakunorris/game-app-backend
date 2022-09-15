@@ -14,7 +14,7 @@ const roomSchema = new Schema({
         type: String,
         required: true
     },
-    opponentname: String,
+    opponent_name: String,
     opponentID: String,
     created: { type: Date, default: Date.now }
 });

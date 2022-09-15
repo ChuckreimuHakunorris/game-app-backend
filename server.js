@@ -44,6 +44,7 @@ app.use("/logout", require("./routes/logout"));
 // protected routes
 app.use(verifyJWT);
 app.use("/players", require("./routes/api/players"));
+app.use("/rooms", require("./routes/api/rooms"));
 
 app.all("*", (req, res) => {
     res.status(404);

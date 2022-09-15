@@ -1,14 +1,13 @@
-const data = {};
-data.players = require("../model/players.json");
+const Player = require("../model/Player");
 
-const getAllPlayers = (req, res) => {
-    res.json(data.players);
+const getAllPlayers = async (req, res) => {
+    const players = await Player.find();
+    if (!players) return res.status(204).json({ "message": "No players found." });
+    res.json(players);
 }
 
-const updatePlayer = (req, res) => {
-    res.json({
-        "name": req.body.name
-    })
+const updatePlayer = async (req, res) => {
+
 }
 
 const deletePlayer = (req, res) => {
