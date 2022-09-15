@@ -19,10 +19,10 @@ const playerSchema = new Schema({
     },
     refreshToken: String,
     created: { type: Date, default: Date.now },
-    games_played: Number,
-    wins: Number,
-    losses: Number,
-    draws: Number
+    games_played: { type: Number, default: 0 },
+    wins: { type: Number, default: 0 },
+    losses: { type: Number, default: 0 },
+    draws: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model("Player", playerSchema);
