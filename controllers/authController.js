@@ -17,7 +17,7 @@ const handleLogin = async (req, res) => {
     const match = await bcrypt.compare(pwd, foundPlayer.password);
 
     if (match) {
-        const roles = Object.values(foundPlayer.roles);
+        const roles = Object.values(foundPlayer.roles).filter(Boolean);
         // create JWTs
         const accessToken = jwt.sign(
             {
@@ -42,7 +42,7 @@ const handleLogin = async (req, res) => {
         console.log(result);
 
         res.cookie("jwt", refreshToken, { httpOnly: true, sameSite: "None", /*secure: true, */maxAge: 24 * 60 * 60 * 1000 });
-        res.json({ accessToken });
+        res.json({ roles, accessToken });
     } else {
         res.sendStatus(401);
     }
