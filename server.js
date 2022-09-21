@@ -16,8 +16,6 @@ const PORT = process.env.PORT || 3500;
 const { Server } = require("socket.io");
 const http = require("http");
 
-
-
 // Connect to MongoDB
 connectDB();
 
@@ -50,6 +48,7 @@ app.use("/logout", require("./routes/logout"));
 app.use(verifyJWT);
 app.use("/players", require("./routes/api/players"));
 app.use("/rooms", require("./routes/api/rooms"));
+app.use("/game", require("./routes/api/game"));
 
 app.all("*", (req, res) => {
     res.status(404);
@@ -65,6 +64,28 @@ app.all("*", (req, res) => {
 app.use(errorHandler);
 
 const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST", "PUT", "DELETE"]
+    }
+});
+
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    socket.on("join_room", (data) => {
+        console.log(data);
+        socket.join(data);
+    })
+
+    socket.on("send_message", (data) => {
+        console.log(data);
+
+        socket.to(data.room).emit("receive_message", data);
+    })
+});
 
 mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB");
