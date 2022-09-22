@@ -67,7 +67,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "https://castrum-tactics.netlify.app/",
+        origin: "https://castrum-tactics.netlify.app",
         methods: ["GET", "POST", "PUT", "DELETE"]
     }
 });
