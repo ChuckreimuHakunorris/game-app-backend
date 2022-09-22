@@ -6,7 +6,7 @@ const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const { logger } = require("./middleware/logEvents");
 const errorHandler = require("./middleware/errorHandler");
-const verifyJWT = require ("./middleware/verifyJWT");
+const verifyJWT = require("./middleware/verifyJWT");
 const cookieParser = require("cookie-parser");
 const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
@@ -67,7 +67,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "https://castrum-tactics.netlify.app",
+        //origin: "https://castrum-tactics.netlify.app",
+        origin: [
+            "http://localhost:3000",
+            "https://castrum-tactics.netlify.app"
+        ],
         methods: ["GET", "POST", "PUT", "DELETE"]
     }
 });
@@ -76,14 +80,19 @@ io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
     socket.on("join_room", (data) => {
-        console.log(data);
-        socket.join(data);
+        console.log(socket.id + " connected to room " + data.room);
+        socket.join(data.room);
+        io.in(data.room).emit("confirm_connection", data);
     })
 
     socket.on("send_message", (data) => {
-        console.log(data);
+        console.log(socket.id + ": '" + data.message + "' to room " + data.room);
 
-        socket.to(data.room).emit("receive_message", data);
+        io.in(data.room).emit("receive_message", data);
+    })
+
+    socket.on("disconnect", (reason) => {
+        console.log(socket.id + " disconnected. Reason: " + reason);
     })
 });
 
