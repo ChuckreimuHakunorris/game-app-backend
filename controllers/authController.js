@@ -39,7 +39,6 @@ const handleLogin = async (req, res) => {
         // Saving refresh token with current user
         foundPlayer.refreshToken = refreshToken;
         const result = await foundPlayer.save();
-        console.log(result);
 
         res.cookie("jwt", refreshToken, { httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000 });
         res.json({ accessToken });
