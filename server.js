@@ -82,12 +82,13 @@ io.on("connection", (socket) => {
     socket.on("join_room", (data) => {
         console.log(socket.id + " connected to room " + data.room);
         socket.join(data.room);
+        data.socketId = socket.id;
         io.in(data.room).emit("confirm_connection", data);
     })
 
     socket.on("send_message", (data) => {
         console.log(socket.id + ": '" + data.message + "' to room " + data.room);
-
+        data.socketId = socket.id;
         io.in(data.room).emit("receive_message", data);
     })
 
