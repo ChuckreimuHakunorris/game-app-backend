@@ -76,6 +76,28 @@ const io = new Server(server, {
     }
 });
 
+let hostMove = {
+    x: -1,
+    y: -1
+}
+
+let opponentMove = {
+    x: -1,
+    y: -1
+}
+
+function checkForMovesRecieved() {
+    if (hostMove.x >= 0 && hostMove.y >= 0 && opponentMove.x >= 0 && opponentMove.y >= 0) {
+        console.log("Both players moves recieved.");
+
+        io.in(1).emit("recieve_moves", hostMove, opponentMove);
+        hostMove.x = -1;
+        hostMove.y = -1;
+        opponentMove.x = -1;
+        opponentMove.y = -1;
+    }
+}
+
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
@@ -83,7 +105,30 @@ io.on("connection", (socket) => {
         console.log(socket.id + " connected to room " + data.room);
         socket.join(data.room);
         data.socketId = socket.id;
+
+        if (data.username === "WilliamDell")
+            data.role = "host";
+        else
+            data.role = "opponent";
+
         io.in(data.room).emit("confirm_connection", data);
+    })
+
+    socket.on("send_move", (x, y, room, username, role, callback) => {
+        console.log(`recieved move [${x}, ${y}] from ${username}`);
+
+        if (role === "host") {
+            hostMove.x = x;
+            hostMove.y = y;
+        }
+        else if (role === "opponent") {
+            opponentMove.x = x;
+            opponentMove.y = y;
+        }
+
+        checkForMovesRecieved();
+
+        callback(`=> server recieved move [${x}, ${y}].`);
     })
 
     socket.on("send_message", (data) => {
