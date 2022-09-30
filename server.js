@@ -90,7 +90,7 @@ function checkForMovesRecieved() {
     if (hostMove.x >= 0 && hostMove.y >= 0 && opponentMove.x >= 0 && opponentMove.y >= 0) {
         console.log("Both players moves recieved.");
 
-        io.in(1).emit("recieve_moves", hostMove, opponentMove);
+        io.in(1).emit("receive_moves", hostMove, opponentMove);
         hostMove.x = -1;
         hostMove.y = -1;
         opponentMove.x = -1;
@@ -115,7 +115,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("send_move", (x, y, room, username, role, callback) => {
-        console.log(`recieved move [${x}, ${y}] from ${username}`);
+        console.log(`received move [${x}, ${y}] from ${username}`);
 
         if (role === "host") {
             hostMove.x = x;
@@ -125,10 +125,10 @@ io.on("connection", (socket) => {
             opponentMove.x = x;
             opponentMove.y = y;
         }
+        
+        callback(`=> server received move [${x}, ${y}].`);
 
         checkForMovesRecieved();
-
-        callback(`=> server recieved move [${x}, ${y}].`);
     })
 
     socket.on("send_message", (data) => {
