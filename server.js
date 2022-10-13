@@ -67,7 +67,6 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        //origin: "https://castrum-tactics.netlify.app",
         origin: [
             "http://localhost:3000",
             "https://castrum-tactics.netlify.app"
@@ -135,6 +134,12 @@ io.on("connection", (socket) => {
         console.log(socket.id + ": '" + data.message + "' to room " + data.room);
         data.socketId = socket.id;
         io.in(data.room).emit("receive_message", data);
+    })
+
+    socket.on("send_game_end", (data) => {
+        console.log(socket.id + ": GAME END to room " + data.room);
+        data.socketId = socket.id;
+        socket.broadcast.to(data.room).emit("receive_game_end", data);
     })
 
     socket.on("disconnect", (reason) => {
