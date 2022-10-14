@@ -85,6 +85,9 @@ let opponentMove = {
     y: -1
 }
 
+let hostName = "";
+let opponentName = "";
+
 function checkForMovesRecieved() {
     if (hostMove.x >= 0 && hostMove.y >= 0 && opponentMove.x >= 0 && opponentMove.y >= 0) {
         console.log("Both players moves recieved.");
@@ -105,12 +108,23 @@ io.on("connection", (socket) => {
         socket.join(data.room);
         data.socketId = socket.id;
 
-        if (data.username === "WilliamDell")
+        roomSize = io.sockets.adapter.rooms.get(data.room).size;
+
+        if (roomSize <= 1) {
             data.role = "host";
-        else
+            hostName = data.username;
+        } else if (roomSize >= 2) {
             data.role = "opponent";
+            opponentName = data.username;
+        }
 
         io.in(data.room).emit("confirm_connection", data);
+
+        if (roomSize >= 2) {
+            data.hostName = hostName;
+            data.opponentName = opponentName;
+            io.in(data.room).emit("both_connected", data);
+        }
     })
 
     socket.on("send_move", (x, y, room, username, role, callback) => {
