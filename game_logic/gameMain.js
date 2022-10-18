@@ -11,7 +11,7 @@ let opponentMove = {
 let hostName = "";
 let opponentName = "";
 
-function checkForMovesRecieved() {
+function checkForMovesRecieved(io) {
     if (hostMove.x >= 0 && hostMove.y >= 0 && opponentMove.x >= 0 && opponentMove.y >= 0) {
         console.log("Both players moves recieved.");
 
@@ -65,7 +65,7 @@ exports = module.exports = function (io) {
 
             callback(`=> server received move [${x}, ${y}].`);
 
-            checkForMovesRecieved();
+            checkForMovesRecieved(io);
         })
 
         socket.on("send_message", (data) => {
