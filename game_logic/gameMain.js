@@ -11,11 +11,11 @@ let opponentMove = {
 let hostName = "";
 let opponentName = "";
 
-function checkForMovesRecieved(io) {
+function checkForMovesRecieved(io, room) {
     if (hostMove.x >= 0 && hostMove.y >= 0 && opponentMove.x >= 0 && opponentMove.y >= 0) {
         console.log("Both players moves recieved.");
 
-        io.in(1).emit("receive_moves", hostMove, opponentMove);
+        io.in(room).emit("receive_moves", hostMove, opponentMove);
         hostMove.x = -1;
         hostMove.y = -1;
         opponentMove.x = -1;
@@ -42,6 +42,8 @@ exports = module.exports = function (io) {
                 opponentName = data.username;
             }
 
+            console.log("Set role " + data.role);
+
             io.in(data.room).emit("confirm_connection", data);
 
             if (roomSize >= 2) {
@@ -65,7 +67,7 @@ exports = module.exports = function (io) {
 
             callback(`=> server received move [${x}, ${y}].`);
 
-            checkForMovesRecieved(io);
+            checkForMovesRecieved(io, room);
         })
 
         socket.on("send_message", (data) => {
