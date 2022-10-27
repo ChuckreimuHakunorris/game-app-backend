@@ -10,12 +10,7 @@ const roomSchema = new Schema({
         type: String,
         required: true
     },
-    hostID: {
-        type: String,
-        required: true
-    },
     opponent_name: String,
-    opponentID: String,
     created: { type: Date, default: Date.now }
 });
 
