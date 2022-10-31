@@ -1,25 +1,33 @@
-let hostMove = {
-    x: -1,
-    y: -1
+const gameDataContainers = [];
+
+function doesContainerExist(id) {
+    let containerFound = false;
+
+    for (let i = 0; i < gameDataContainers.length; i++) {
+        if (gameDataContainers[i].id === id)
+            containerFound = true;
+    }
+
+    return containerFound;
 }
 
-let opponentMove = {
-    x: -1,
-    y: -1
+function getContainer(id) {
+    for (let i = 0; i < gameDataContainers.length; i++) {
+        if (gameDataContainers[i].id === id)
+            return gameDataContainers[i];
+    }
 }
-
-let hostName = "";
-let opponentName = "";
 
 function checkForMovesRecieved(io, room) {
-    if (hostMove.x >= 0 && hostMove.y >= 0 && opponentMove.x >= 0 && opponentMove.y >= 0) {
+    if (getContainer(room).hostMove.x >= 0 && getContainer(room).hostMove.y >= 0 
+     && getContainer(room).opponentMove.x >= 0 && getContainer(room).opponentMove.y >= 0) {
         console.log("Both players moves recieved.");
 
-        io.in(room).emit("receive_moves", hostMove, opponentMove);
-        hostMove.x = -1;
-        hostMove.y = -1;
-        opponentMove.x = -1;
-        opponentMove.y = -1;
+        io.in(room).emit("receive_moves", getContainer(room).hostMove, getContainer(room).opponentMove);
+        getContainer(room).hostMove.x = -1;
+        getContainer(room).hostMove.y = -1;
+        getContainer(room).opponentMove.x = -1;
+        getContainer(room).opponentMove.y = -1;
     }
 }
 
@@ -34,12 +42,24 @@ exports = module.exports = function (io) {
 
             roomSize = io.sockets.adapter.rooms.get(data.room).size;
 
+            if (!doesContainerExist(data.room)) {
+                let dataCont = {
+                    id: data.room,
+                    hostName: "",
+                    opponentName: "",
+                    hostMove: { x: -1, y: -1 },
+                    opponentMove: { x: -1, y: -1 }
+                }
+
+                gameDataContainers.push(dataCont);
+            }
+
             if (roomSize <= 1) {
                 data.role = "host";
-                hostName = data.username;
+                getContainer(data.room).hostName = data.username;
             } else if (roomSize >= 2) {
                 data.role = "opponent";
-                opponentName = data.username;
+                getContainer(data.room).opponentName = data.username;
             }
 
             console.log("Set role " + data.role);
@@ -47,8 +67,8 @@ exports = module.exports = function (io) {
             io.in(data.room).emit("confirm_connection", data);
 
             if (roomSize >= 2) {
-                data.hostName = hostName;
-                data.opponentName = opponentName;
+                data.hostName = getContainer(data.room).hostName;
+                data.opponentName = getContainer(data.room).opponentName;
                 io.in(data.room).emit("both_connected", data);
             }
         })
@@ -57,12 +77,12 @@ exports = module.exports = function (io) {
             console.log(`received move [${x}, ${y}] from ${username}`);
 
             if (role === "host") {
-                hostMove.x = x;
-                hostMove.y = y;
+                getContainer(room).hostMove.x = x;
+                getContainer(room).hostMove.y = y;
             }
             else if (role === "opponent") {
-                opponentMove.x = x;
-                opponentMove.y = y;
+                getContainer(room).opponentMove.x = x;
+                getContainer(room).opponentMove.y = y;
             }
 
             callback(`=> server received move [${x}, ${y}].`);
