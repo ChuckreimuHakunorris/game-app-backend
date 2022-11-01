@@ -12,6 +12,7 @@ const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
 const PORT = process.env.PORT || 3500;
+const Room = require("./model/Room");
 
 const { Server } = require("socket.io");
 const http = require("http");
@@ -82,3 +83,5 @@ mongoose.connection.once("open", () => {
     //app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
+
+Room.collection.drop();

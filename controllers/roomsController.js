@@ -7,8 +7,8 @@ const getAllRooms= async (req, res) => {
 }
 
 const createNewRoom = async (req, res) => {
-    if(!req?.body?.roomname || !req?.body?.hostname || !req?.body?.hostID) {
-        return res.status(400).json({ "message": "Room name, host name and host ID are required"});
+    if(!req?.body?.roomname || !req?.body?.hostname) {
+        return res.status(400).json({ "message": "Room name and host name are required."});
     }
 
     try {
