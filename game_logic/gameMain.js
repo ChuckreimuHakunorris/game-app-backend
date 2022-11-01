@@ -18,6 +18,13 @@ function getContainer(id) {
     }
 }
 
+function removeContainer(id) {
+    for (let i = 0; i < gameDataContainers.length; i++) {
+        if (gameDataContainers[i].id === id)
+            gameDataContainers.splice(i, 1);
+    }
+}
+
 function checkForMovesRecieved(io, room) {
     if (getContainer(room).hostMove.x >= 0 && getContainer(room).hostMove.y >= 0 
      && getContainer(room).opponentMove.x >= 0 && getContainer(room).opponentMove.y >= 0) {
@@ -100,6 +107,8 @@ exports = module.exports = function (io) {
             console.log(socket.id + ": GAME END to room " + data.room);
             data.socketId = socket.id;
             socket.broadcast.to(data.room).emit("receive_game_end", data);
+
+            removeContainer(data.room);
         })
 
         socket.on("disconnect", (reason) => {
