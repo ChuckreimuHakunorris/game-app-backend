@@ -22,7 +22,7 @@ const updatePlayer = async (req, res) => {
     if (req.body?.losses) player.losses = req.body.losses;
     if (req.body?.draws) player.draws = req.body.draws;
 
-    const result = await room.save();
+    const result = await player.save();
     res.json(result);
 }
 
@@ -37,7 +37,7 @@ const getPlayer = async (req, res) => {
         return res.status(400).json({ "message": "Username is required." });
     }
 
-    const player = await Player.findOne({ _id: req.params.username}).exec();
+    const player = await Player.findOne({ username: req.params.username}).exec();
 
     if (!player) {
         return res.status(204).json({ "message": `No player matches username ${req.params.id}.` });
