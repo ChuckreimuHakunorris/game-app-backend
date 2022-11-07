@@ -9,7 +9,7 @@ router.route("/")
     .put(playersController.updatePlayer)
     .delete(verifyRoles(ROLES_LIST.Admin), playersController.deletePlayer);
 
-router.route("/:id")
+router.route("/:username")
     .get(playersController.getPlayer);
 
 module.exports = router;
