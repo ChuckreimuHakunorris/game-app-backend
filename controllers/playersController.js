@@ -2,8 +2,24 @@ const Player = require("../model/Player");
 
 const getAllPlayers = async (req, res) => {
     const players = await Player.find();
+
     if (!players) return res.status(204).json({ "message": "No players found." });
-    res.json(players);
+
+    let playerDataContainers = [];
+
+    for (let i = 0; i < players.length; i++) {
+        const playerData = {
+            username: players[i].username,
+            games_played: players[i].games_played,
+            wins: players[i].wins,
+            draws: players[i].draws,
+            losses: players[i].losses
+        }
+
+        playerDataContainers.push(playerData);
+    }
+
+    res.json(playerDataContainers);
 }
 
 const updatePlayer = async (req, res) => {
@@ -43,7 +59,15 @@ const getPlayer = async (req, res) => {
         return res.status(204).json({ "message": `No player matches username ${req.params.id}.` });
     }
 
-    res.json(player);
+    const playerData = {
+        username: player.username,
+        games_played: player.games_played,
+        wins: player.wins,
+        draws: player.draws,
+        losses: player.losses
+    }
+
+    res.json(playerData);
 }
 
 module.exports = {
