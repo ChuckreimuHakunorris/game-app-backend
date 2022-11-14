@@ -10,6 +10,10 @@ const roomSchema = new Schema({
         type: String,
         required: true
     },
+    stage: {
+        type: String,
+        required: true
+    },
     opponent_name: String,
     created: { type: Date, default: Date.now }
 });
