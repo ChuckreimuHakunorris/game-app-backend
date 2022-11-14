@@ -15,7 +15,8 @@ const createNewRoom = async (req, res) => {
         const result = await Room.create({
             roomname: req.body.roomname,
             hostname: req.body.hostname,
-            hostID: req.body.hostID 
+            hostID: req.body.hostID,
+            stage: req.body.stage
         });
 
         res.status(201).json(result);
