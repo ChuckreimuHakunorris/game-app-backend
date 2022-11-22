@@ -49,12 +49,12 @@ const deleteRoom = async (req, res) => {
     }
 
     const room = await Room.findOne({ _id: req.body.id}).exec();
-
+    
     if (!room) {
         return res.status(204).json({ "message": `No room matches ID ${req.body.id}.` });
     }
 
-    const result = await room.deleteOne({ _id: req.res.body.id });
+    const result = await room.deleteOne({ _id: req.body.id });
     res.json(result);
 }
 
