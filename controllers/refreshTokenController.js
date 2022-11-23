@@ -32,7 +32,7 @@ const handleRefreshToken = async (req, res) => {
                 { expiresIn: "15m" }
             );
 
-            res.json({ accessToken });
+            res.json({ user: decoded.username, accessToken, roles });
         }
     )
 }
